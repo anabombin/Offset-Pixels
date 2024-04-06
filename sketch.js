@@ -15,6 +15,8 @@ let color11;
 let color12;
 let color13;
 let color14;
+let xSpeeds = [];
+let ySpeeds = [];
 
 const params = {
   Stroke: 50,
@@ -111,13 +113,23 @@ function draw() {
       }
     }
   }
-
-
   // Delete last point drawn
   camera_button.mousePressed(() => {
     xPoints.pop();
     yPoints.pop();
   });
+
+  for (let i = 0; i < xPoints.length; i++) {
+    // Update x and y positions based on their respective speeds
+    xPoints[i] += xSpeeds[i];
+    yPoints[i] += ySpeeds[i];
+    
+    // Check if the point has hit the boundary, and if so, reverse its speed
+    if (xPoints[i] > width || yPoints[i] > height || xPoints[i] < 0 || yPoints[i] < 0) {
+      xSpeeds[i] *= -1;
+      ySpeeds[i] *= -1;
+    }
+  }
 
   updatePixels(); // Update canvas with modified pixel values
 }
@@ -130,6 +142,8 @@ function mousePressed(){
   } else {
     append(xPoints, mouseX);
     append(yPoints, mouseY);
+    append(xSpeeds, random(1,6));
+    append(ySpeeds, random(1,6));
   }
 }
 
